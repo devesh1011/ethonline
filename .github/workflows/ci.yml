@@ -1,0 +1,91 @@
+name: Full workspace quality gates
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: receivablex
+          POSTGRES_PASSWORD: receivablex
+          POSTGRES_DB: receivablex
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U receivablex -d receivablex"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DATABASE_URL: postgresql://receivablex:receivablex@127.0.0.1:5432/receivablex
+      HEDERA_NETWORK: ci-local
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Require a checkout without private environment files
+        run: test ! -f .env && test ! -f src/web/.env && test ! -f src/web/.env.local
+      - run: npm ci --no-fund
+      - name: Install PostgreSQL client tools matching the isolated service
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client-16
+      - name: Lint, types, script checks, all builds, migrations, tests and dependency review
+        run: npm run ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: workspace-quality-report
+          path: .claude/reports/ci
+          include-hidden-files: true
+          if-no-files-found: warn
+
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [historical, signed, pages]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: receivablex
+          POSTGRES_PASSWORD: receivablex
+          POSTGRES_DB: receivablex
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U receivablex -d receivablex"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      DATABASE_URL: postgresql://receivablex:receivablex@127.0.0.1:5432/receivablex
+      NEXT_TELEMETRY_DISABLED: "1"
+      PLAYWRIGHT_CHANNEL: chromium
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Compile local contract artifacts used by application imports
+        run: npm exec --workspace @receivablex/contracts -- hardhat --config hardhat.local.config.ts compile
+      - name: Browser suite with owned servers and isolated database fixtures
+        run: node scripts/ci/browser.mjs ${{ matrix.suite }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-${{ matrix.suite }}
+          path: .claude/reports/ci/browser
+          include-hidden-files: true
+          if-no-files-found: warn
