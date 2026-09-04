@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.local/
+node_modules/
+**/.next/
+**/dist/
+**/artifacts/
+**/cache/
+**/typechain-types/
+docs/research/
+*.pem
+*.key
