@@ -1,0 +1,24 @@
+{
+  "name": "@receivablex/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "hardhat --config hardhat.local.config.ts test",
+    "typecheck": "tsc --noEmit",
+    "build": "hardhat compile",
+    "deploy:testnet": "tsx scripts/deploy-testnet.ts",
+    "verify:testnet": "hardhat verify --network testnet"
+  },
+  "devDependencies": {
+    "@hiero-ledger/sdk": "2.88.0",
+    "@hashgraph/smart-contracts": "github:hashgraph/hedera-smart-contracts#v0.10.1",
+    "@nomicfoundation/hardhat-toolbox": "6.1.0",
+    "@openzeppelin/contracts": "5.4.0",
+    "@types/chai": "4.3.20",
+    "@types/mocha": "10.0.10",
+    "dotenv": "17.2.2",
+    "hardhat": "2.29.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.2"
+  }
+}
