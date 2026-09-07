@@ -1,0 +1,65 @@
+import { expect } from "chai";
+import { ethers } from "hardhat";
+async function fixture() {
+  const [admin, trustee, servicer, holder, other] = await ethers.getSigners();
+  const token = await (await ethers.getContractFactory("MockPaymentToken")).deploy();
+  const asset = await (await ethers.getContractFactory("MockSnapshotAsset")).deploy();
+  const registry = await (await ethers.getContractFactory("ReceivablePoolRegistry")).deploy(admin.address);
+  const payout = await (await ethers.getContractFactory("MockLifeCycleCashFlow")).deploy(await token.getAddress());
+  await payout.setOperator(await registry.getAddress()); await payout.setAsset(await asset.getAddress());
+  const now = (await ethers.provider.getBlock("latest"))!.timestamp;
+  const poolId = ethers.id("lifecycle");
+  const leaf = { schemaVersion: 1, fuIdHash: ethers.id("FU-LIFE"), obligorIdHash: ethers.id("OBL-LIFE"), faceValue: 100n, dueDate: now + 50, acceptedAt: now - 100, currency: "0x494e52", evidenceHash: ethers.id("life-evidence") };
+  const commitment = { poolId, poolRoot: await registry.hashReceivableLeaf(leaf), eligibilityRoot: ethers.id("eligibility"), manifestHash: ethers.id("manifest"), assignmentDocumentHash: ethers.id("assignment"), originator: admin.address, trustee: trustee.address, originalFaceValue: 100n, originalInvestorPrincipal: 98n, totalUnits: 100n, retainedUnitsAtIssuance: 5n, maturity: now + 100 };
+  await registry.createPool(commitment); await registry.activatePool(poolId, await asset.getAddress(), await payout.getAddress(), await token.getAddress());
+  await registry.grantRole(await registry.TRUSTEE_ROLE(), trustee.address); await registry.grantRole(await registry.SERVICER_ROLE(), servicer.address); await registry.grantRole(await registry.PAYOUT_EXECUTOR_ROLE(), servicer.address);
+  await asset.setBalance(holder.address, 100n);
+  return { registry, payout, token, asset, admin, trustee, servicer, holder, other, poolId, leaf, commitment };
+}
+describe("Maturity, retirement and guarded closure", () => {
+  it("continues settlement at maturity, closes only after paid/finalized/retired, and never reuses old custody", async () => {
+    const { registry, payout, token, asset, trustee, servicer, holder, other, poolId, leaf, commitment } = await fixture();
+    await expect(registry.connect(trustee).markMatured(poolId)).to.be.revertedWithCustomError(registry, "PoolNotMature");
+    await expect(registry.connect(other).markMatured(poolId)).to.be.revertedWithCustomError(registry, "AccessControlUnauthorizedAccount");
+    await ethers.provider.send("evm_setNextBlockTimestamp", [commitment.maturity]);
+    await expect(registry.connect(trustee).markMatured(poolId)).to.emit(registry, "PoolMatured");
+    expect((await registry.getPool(poolId)).status).to.equal(3n);
+    await expect(registry.connect(trustee).closePool(poolId)).to.be.revertedWithCustomError(registry, "UnresolvedPoolObligations");
+    await token.mint(await payout.getAddress(), 100n);
+    await registry.connect(servicer).recordCollection(poolId, ethers.id("life-cash"), ethers.id("cash-payload"), 100n, leaf, []);
+    expect((await registry.getPool(poolId)).status).to.equal(3n);
+    await asset.setSnapshot(1, [holder.address], [100n]);
+    const distributionId = ethers.id("life-distribution");
+    const entitlements = [{ holder: holder.address, snapshotBalance: 100n, cashAmount: 100n, principalAmount: 98n, incomeAmount: 2n }];
+    await registry.connect(trustee).approveDistribution(poolId, distributionId, 1, 98n, 2n, entitlements);
+    expect(await registry.pendingDistributions(poolId)).to.equal(1n);
+    await registry.connect(servicer).executeDistributionBatch(distributionId, entitlements, [[]]);
+    expect((await registry.getPool(poolId)).investorPrincipalOutstanding).to.equal(0n);
+    await expect(registry.connect(trustee).closePool(poolId)).to.be.revertedWithCustomError(registry, "UnresolvedPoolObligations");
+    await registry.connect(trustee).finalizeDistribution(distributionId);
+    expect(await registry.pendingDistributions(poolId)).to.equal(0n);
+    await expect(registry.connect(trustee).closePool(poolId)).to.be.revertedWithCustomError(registry, "UnresolvedPoolObligations");
+    await expect(asset.connect(other).retire(100n)).to.be.revertedWith("balance");
+    await asset.connect(holder).retire(100n);
+    await expect(registry.connect(trustee).closePool(poolId)).to.emit(registry, "PoolClosed");
+    expect(await registry.activePoolId()).to.equal(ethers.ZeroHash);
+    expect(await registry.payoutCustodyOwner(await payout.getAddress())).to.equal(poolId);
+    expect(await token.balanceOf(holder.address)).to.equal(100n);
+    await expect(registry.connect(trustee).closePool(poolId)).not.to.be.reverted;
+    const second = ethers.id("next-pool"); await registry.createPool({ ...commitment, poolId: second });
+    await expect(registry.activatePool(second, await asset.getAddress(), await payout.getAddress(), await token.getAddress())).to.be.revertedWithCustomError(registry, "PayoutCustodyAlreadyBound");
+    const freshPayout = await (await ethers.getContractFactory("MockLifeCycleCashFlow")).deploy(await token.getAddress());
+    await freshPayout.setOperator(await registry.getAddress()); await freshPayout.setAsset(await asset.getAddress());
+    await registry.activatePool(second, await asset.getAddress(), await freshPayout.getAddress(), await token.getAddress());
+    expect(await registry.activePoolId()).to.equal(second);
+  });
+  it("keeps delinquency/default/recovery/cure open after maturity without forgiving principal", async () => {
+    const { registry, trustee, servicer, poolId, leaf, commitment } = await fixture();
+    await ethers.provider.send("evm_setNextBlockTimestamp", [commitment.maturity]); await registry.connect(trustee).markMatured(poolId);
+    await registry.connect(servicer).markDelinquent(poolId, ethers.id("late-life"), ethers.id("late"), leaf, []);
+    await registry.connect(trustee).markDefault(poolId, ethers.id("default-life"), ethers.id("default"), 40n, leaf, []);
+    await registry.connect(trustee).reviseRecoveryEstimate(poolId, ethers.id("revise-life"), ethers.id("revise"), 50n, leaf, []);
+    await registry.connect(trustee).cureReceivable(poolId, ethers.id("cure-life"), ethers.id("cure"), leaf, []);
+    const pool = await registry.getPool(poolId); expect(pool.investorPrincipalOutstanding).to.equal(98n); expect(pool.performingFaceOutstanding).to.equal(100n); expect(pool.status).to.equal(3n);
+  });
+});
