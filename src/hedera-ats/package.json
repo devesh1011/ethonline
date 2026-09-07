@@ -1,0 +1,25 @@
+{
+  "name": "@receivablex/hedera-ats",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "deploy:testnet": "tsx src/deploy-testnet.ts",
+    "test": "tsx --test src/adapter.test.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@hashgraph/asset-tokenization-contracts": "8.0.0",
+    "ethers": "6.17.0"
+  },
+  "devDependencies": {
+    "@hiero-ledger/sdk": "2.88.0",
+    "@terminal3/ecdsa_vc": "0.1.16",
+    "@terminal3/vc_core": "0.0.19",
+    "dotenv": "17.2.2",
+    "@types/node": "22.15.3",
+    "typescript": "5.9.2"
+  }
+}
