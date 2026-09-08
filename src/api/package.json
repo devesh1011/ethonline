@@ -1,0 +1,31 @@
+{
+  "name": "@receivablex/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "test": "vitest run --dir test && tsx --test src/auth.test.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@hiero-ledger/sdk": "2.88.0",
+    "@hiero-ledger/proto": "2.31.0",
+    "@receivablex/db": "*",
+    "@receivablex/domain": "*",
+    "@receivablex/hedera-ats": "*",
+    "@receivablex/hedera-native": "*",
+    "ethers": "6.17.0",
+    "pg": "8.23.0",
+    "fastify": "5.12.4"
+  },
+  "devDependencies": {
+    "@types/node": "22.15.3",
+    "@types/pg": "8.15.5",
+    "vitest": "3.2.7",
+    "tsx": "4.20.6",
+    "typescript": "5.9.2"
+  }
+}
