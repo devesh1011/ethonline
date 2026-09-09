@@ -1,0 +1,160 @@
+[
+  {
+    "package": "@vitest/mocker",
+    "versions": [
+      "3.2.7"
+    ],
+    "maxSeverity": "moderate",
+    "advisories": [
+      "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Development-only Vitest 3 runner. CI uses run mode, never a listening UI/mocker server; major migration needed for remaining advisory. Reviewed test inputs only."
+  },
+  {
+    "package": "adm-zip",
+    "versions": [
+      "0.4.16"
+    ],
+    "maxSeverity": "high",
+    "advisories": [
+      "https://github.com/advisories/GHSA-xcpc-8h2w-3j85"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Hardhat 2 compiler/tooling dependency. CI uses pinned official compiler sources and no user-supplied archives. The 0.6 upgrade changes a pre-1.0 API; defer to tested Hardhat migration."
+  },
+  {
+    "package": "cookie",
+    "versions": [
+      "0.4.2"
+    ],
+    "maxSeverity": "low",
+    "advisories": [
+      "https://github.com/advisories/GHSA-pxg6-pf52-xh8x"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Legacy Sentry dependency of Hardhat tooling. Application authentication uses bearer tokens and does not call this serializer; tooling upgrade still required."
+  },
+  {
+    "package": "diff",
+    "versions": [
+      "7.0.0"
+    ],
+    "maxSeverity": "low",
+    "advisories": [
+      "https://github.com/advisories/GHSA-73rr-hh4g-fpgx"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Mocha/Hardhat CLI comparison dependency; no application endpoint uses it. Only reviewed test inputs enter this tool; major upgrade deferred."
+  },
+  {
+    "package": "elliptic",
+    "versions": [
+      "6.6.1"
+    ],
+    "maxSeverity": "low",
+    "advisories": [
+      "https://github.com/advisories/GHSA-848j-6mx2-7j84"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Hedera wallet SDK 2.79 and ethers 5/tooling graph. Cryptographic reachability is not ruled out. Exact WalletConnect SDK peer pin prevents an untested replacement; real-wallet acceptance remains pending."
+  },
+  {
+    "package": "image-size",
+    "versions": [
+      "1.2.1"
+    ],
+    "maxSeverity": "high",
+    "advisories": [
+      "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+      "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "ReactNative/Metro auto-installed peer graph from wallet tooling. No ReactNative app or Metro server is run and Next app does not invoke these parsers. Requires reviewed peer pruning/Metro migration."
+  },
+  {
+    "package": "serialize-javascript",
+    "versions": [
+      "6.0.2"
+    ],
+    "maxSeverity": "high",
+    "advisories": [
+      "https://github.com/advisories/GHSA-5c6j-r48x-rmvq",
+      "https://github.com/advisories/GHSA-qj8w-gfj5-8c6v"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Mocha/Hardhat development dependency; no user-controlled application data is serialized through it. Patched major requires toolchain compatibility testing."
+  },
+  {
+    "package": "tmp",
+    "versions": [
+      "0.0.33"
+    ],
+    "maxSeverity": "high",
+    "advisories": [
+      "https://github.com/advisories/GHSA-52f5-9888-hmc6",
+      "https://github.com/advisories/GHSA-ph9p-34f9-6g65"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "solc/Hardhat tooling dependency operating on CI-generated files, not caller-selected paths. Patched pre-1.0 minor/API change deferred to tested compiler-toolchain migration."
+  },
+  {
+    "package": "undici",
+    "versions": [
+      "5.29.0"
+    ],
+    "maxSeverity": "high",
+    "advisories": [
+      "https://github.com/advisories/GHSA-g9mf-h72j-4rw9",
+      "https://github.com/advisories/GHSA-2mjp-6q6p-2qxm",
+      "https://github.com/advisories/GHSA-vrm6-8vpv-qv8q",
+      "https://github.com/advisories/GHSA-v9p9-hfj2-hcw8",
+      "https://github.com/advisories/GHSA-4992-7rv2-5pvq",
+      "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+      "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+      "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+      "https://github.com/advisories/GHSA-35p6-xmwp-9g52"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Hardhat 2 HTTP dependency; CI only uses pinned compiler/tooling endpoints, not public server request forwarding. Application global fetch is Node's separate runtime implementation. Major upgrade deferred."
+  },
+  {
+    "package": "uuid",
+    "versions": [
+      "8.3.2",
+      "10.0.0"
+    ],
+    "maxSeverity": "moderate",
+    "advisories": [
+      "https://github.com/advisories/GHSA-w5hq-g745-h8pq"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Terminal3 VC core and Hardhat use UUID identifiers; app path uses v4 generation without caller-provided buffers. The advisory concerns buffer-bound v3/v5/v6 APIs. Major library migration deferred."
+  },
+  {
+    "package": "vitest",
+    "versions": [
+      "3.2.7"
+    ],
+    "maxSeverity": "moderate",
+    "advisories": [
+      "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
+    ],
+    "reviewed": "2026-09-13",
+    "expires": "2026-10-13",
+    "reason": "Development-only run mode with no public Vitest UI server. Version 3.2.7 removes the earlier critical UI advisory; remaining mocker advisory requires a separately tested major upgrade."
+  }
+]

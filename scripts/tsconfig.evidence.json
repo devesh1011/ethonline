@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true },
+  "files": [
+    "evidence-verifier.ts", "evidence-verifier.test.ts", "verify-evidence.ts",
+    "enrich-evidence.ts", "product-evidence.ts", "export-product-evidence.ts",
+    "export-p0-acceptance.ts", "p0-acceptance.ts", "p0-provision.ts"
+  ]
+}
