@@ -1,0 +1,10 @@
+{$API_HOSTNAME} {
+  encode zstd gzip
+  header {
+    X-Content-Type-Options nosniff
+    Referrer-Policy no-referrer
+    Strict-Transport-Security "max-age=31536000"
+    -Server
+  }
+  reverse_proxy api:3001
+}

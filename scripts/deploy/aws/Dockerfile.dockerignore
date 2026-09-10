@@ -1,0 +1,13 @@
+.git
+.local
+**/node_modules
+**/dist
+**/.env*
+**/*.env
+**/*.pem
+**/*.key
+source.tar.gz
+online-keys
+**/online-keys
+**/secret-bindings.json
+**/keys

@@ -1,0 +1,36 @@
+#cloud-config
+package_update: true
+packages:
+  - docker.io
+  - docker-compose-v2
+  - curl
+  - jq
+  - unattended-upgrades
+runcmd:
+  - [systemctl, enable, --now, docker]
+  - [usermod, -aG, docker, ubuntu]
+  - [install, -d, -m, '0750', -o, ubuntu, -g, ubuntu, /opt/receivablex]
+  - [install, -d, -m, '0700', -o, ubuntu, -g, ubuntu, /opt/receivablex/secrets]
+  - [install, -d, -m, '0750', -o, ubuntu, -g, ubuntu, /opt/receivablex/releases]
+  - [fallocate, -l, 2G, /swapfile]
+  - [chmod, '0600', /swapfile]
+  - [mkswap, /swapfile]
+  - [swapon, /swapfile]
+  - [systemctl, enable, receivablex-swap.service]
+write_files:
+  - path: /etc/sysctl.d/99-receivablex.conf
+    permissions: '0644'
+    content: |
+      vm.swappiness=10
+  - path: /etc/systemd/system/receivablex-swap.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=ReceivableX build swap
+      After=local-fs.target
+      [Service]
+      Type=oneshot
+      ExecStart=/bin/sh -c '/sbin/swapon --show=NAME --noheadings | /bin/grep -q /swapfile || /sbin/swapon /swapfile'
+      RemainAfterExit=yes
+      [Install]
+      WantedBy=multi-user.target
