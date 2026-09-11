@@ -1,0 +1,10 @@
+.review { min-width: 0; overflow-wrap: anywhere; }
+.review table { min-width: 0; table-layout: fixed; margin: 20px 0; }
+.review caption { text-align: left; font-weight: 700; padding-bottom: 12px; }
+.review th, .review td { padding: 10px 8px; }
+.review th:first-child, .review td:first-child { width: 25%; }
+.review th:last-child, .review td:last-child { width: 38%; text-align: right; font-variant-numeric: tabular-nums; }
+.review details { margin-block: 18px; }
+.review summary { cursor: pointer; padding-block: 8px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-block: 12px 20px; }
+.pagination span { font-size: 12px; font-variant-numeric: tabular-nums; }
