@@ -1,0 +1,64 @@
+:root {
+  color-scheme: dark;
+  --canvas: oklch(0.16 0.005 165);
+  --surface: oklch(0.205 0.006 165);
+  --surface-subtle: oklch(0.245 0.007 165);
+  --ink: oklch(0.96 0.004 165);
+  --muted: oklch(0.76 0.012 165);
+  --border: oklch(0.32 0.01 165);
+  --brand: oklch(0.84 0.12 163);
+  --brand-deep: oklch(0.84 0.12 163);
+  --brand-soft: oklch(0.28 0.035 163);
+  --attention: oklch(0.84 0.12 80);
+  --attention-soft: oklch(0.27 0.035 75);
+  --danger: oklch(0.78 0.13 27);
+  --danger-soft: oklch(0.27 0.045 25);
+  --success: oklch(0.83 0.13 160);
+  --paper: var(--canvas);
+  --paper-2: var(--surface);
+  --green: var(--brand);
+  --red: var(--danger);
+  --hairline: var(--border);
+  --z-sticky: 10;
+  --z-backdrop: 15;
+  --z-navigation: 20;
+  --z-popover: 30;
+  --z-skip: 50;
+  --material-background: #111a15;
+  --material-floor: #0b130e;
+  --material-workbench: #18221c;
+  --material-surface: #223027;
+  --material-raised: #314638;
+  --material-edge: #435c4c;
+  --material-hover: #405646;
+  --material-active: #335841;
+  --material-action-edge: #386e50;
+  --material-positive: #a7eec9;
+  --material-positive-shade: #7adbb0;
+  --material-positive-hover: #b5f1d3;
+  --material-positive-hover-shade: #8ce5be;
+  --document-face: #e0f5e7;
+  --document-shade: #b9d6c5;
+  --document-side: #7d9485;
+  --document-back: #657e70;
+  --document-ink: #173529;
+  --document-action: #214c37;
+  --document-rule: #17352930;
+  --material-rim: #ffffff20;
+  --material-hairline: #ffffff14;
+  --material-shine: #ffffff66;
+  --material-shadow: #0004;
+  --material-scrim: #040b079c;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--canvas); scroll-padding-top: 88px; }
+body { margin: 0; color: var(--ink); background: var(--canvas); font-family: "Manrope Variable", sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
+button, a { -webkit-tap-highlight-color: transparent; }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+::selection { color: var(--canvas); background: var(--brand); }
+:where(a, button, summary, input, select, textarea):focus-visible { outline: 2px solid var(--brand); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

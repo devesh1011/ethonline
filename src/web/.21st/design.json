@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "project": {
+    "name": "@receivablex/web",
+    "productType": "Receivables financing and servicing workspace with a public product introduction",
+    "stack": [
+      "nextjs",
+      "react"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "app/globals.css"
+    ],
+    "components": ["components/brand.tsx", "components/wallet-button.tsx", "components/command-shell.tsx", "components/asset-folio.tsx", "components/receivable-inspector.tsx", "components/workspace-views.tsx", "components/landing-page.tsx"],
+    "assets": [],
+    "instructions": [
+      "AGENTS.md"
+    ]
+  },
+  "design": {
+    "colorMode": "dark",
+    "colors": { "canvas": "oklch(0.16 0.005 165)", "surface": "oklch(0.205 0.006 165)", "ink": "oklch(0.96 0.004 165)", "muted": "oklch(0.76 0.012 165)", "accent": "oklch(0.84 0.12 163)" },
+    "typography": { "primary": "Manrope Variable", "codeOnly": "JetBrains Mono Variable", "dashboardHeading": "28px", "landingHeadingMaximum": "68px" },
+    "spacing": {},
+    "radius": {},
+    "shadows": {},
+    "motion": { "engine": "GSAP 3.15.0 with @gsap/react 2.1.2", "patterns": ["Transform-based folio transitions", "Moving navigation marker", "Contextual sheet entry and exit", "Press feedback"], "accessibility": "Reduced-motion media queries; native dialog focus and scoped cleanup" },
+    "density": "Compact product workspace; spacious brand introduction"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": ["Next Link", "native dialog", "native inputs and selects", "WalletButton", "WorkspaceProvider", "existing financial action components"],
+    "patterns": ["Raised horizontal command dock", "CSS-3D receivable folio", "Contextual read-only record sheet", "Actual status composition", "Searchable asset ledger", "Accessible participant tabs"]
+  },
+  "constraints": {
+    "must": ["Keep real wallet and financial command handlers unchanged", "Preserve testnet and synthetic-data disclosure", "Use only actual API or clearly labelled recorded data", "Support keyboard, reduced motion and narrow mobile screens"],
+    "avoid": ["Invented APY, adoption statistics or charts", "Copied Aave branding", "Decorative gradient text, glass, or repeated card grids", "Permanent sidebar", "Display serif typography in operational UI"]
+  },
+  "decisions": [{ "direction": "Dimensional graphite workbench with mint document sheets", "basis": "User supplied Aave Pro, then explicitly rejected the flat sidebar-led reskin and requested structural depth and GSAP motion.", "implementation": "Separate product introduction at / from /dashboard. Replace the sidebar with a command dock, show actual receivables in a CSS-3D folio, and inspect records in a contextual sheet. Retain existing routes, financial handlers and real WalletButton.", "scene": "A servicer moves between receivable records and cash states; document depth distinguishes inspectable assets from accounting data.", "referenceUse": "Aave Pro observed for density, type scale and grouped data, not copied assets or market content.", "catalogStatus": "21st context initialization and local review used. Catalog search attempted but login was unavailable; no hosted AI generation or catalog component installation. GSAP installed separately.", "reviewStatus": "Implemented locally for user review; not published or claimed user-approved." }],
+  "evidence": [
+    {
+      "fact": "design.colorMode:dark",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "AGENTS.md"
+    },
+    {
+      "fact": "project.stack:nextjs",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-09-13T05:13:49.074Z"
+}
