@@ -1,0 +1,85 @@
+import { expect, test } from "@playwright/test";
+import { Wallet, getBytes } from "ethers";
+test.skip(process.env.POOL_DRAFT_BROWSER_TEST !== "true", "Requires isolated local draft API on 4319 and frontend3143");
+
+test("signed owner imports, corrects CSV, saves, reopens, edits, and approves a durable revision", async ({ page }) => {
+  const wallet = new Wallet(`0x${"0".repeat(63)}1`); // Public test key, never used on a network.
+  const trusteeWallet = new Wallet(`0x${"0".repeat(63)}2`);
+  let signingWallet = wallet;
+  await page.exposeFunction("signDraftTestMessage", (hex: string) => signingWallet.signMessage(getBytes(hex)));
+  await page.addInitScript(({ trusteeAddress }) => {
+    let address = "0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf";
+    const handlers: Record<string, ((value: unknown) => void)[]> = {};
+    const provider = { isMetaMask: true, on: (name: string, listener: (value: unknown) => void) => { (handlers[name] ??= []).push(listener); }, removeListener: () => {}, request: async ({ method, params }: { method: string; params?: string[] }) => {
+      if (method === "eth_chainId") return "0x128";
+      if (method === "wallet_switchEthereumChain") return null;
+      if (method === "eth_requestAccounts") { sessionStorage.setItem("draft-wallet", "true"); return [address]; }
+      if (method === "eth_accounts") return sessionStorage.getItem("draft-wallet") ? [address] : [];
+      if (method === "personal_sign") return (window as unknown as { signDraftTestMessage: (hex: string) => Promise<string> }).signDraftTestMessage(params![0]!);
+      throw new Error(`Unexpected provider request ${method}`);
+    } };
+    Object.defineProperty(window, "ethereum", { value: provider });
+    Object.assign(window, { switchDraftTrustee: () => { address = trusteeAddress; handlers.accountsChanged?.forEach(handler => handler([address])); } });
+    window.addEventListener("eip6963:requestProvider", () => window.dispatchEvent(new CustomEvent("eip6963:announceProvider", { detail: { info: { uuid: "draft-metamask", name: "MetaMask", rdns: "io.metamask", icon: "" }, provider } })));
+  }, { trusteeAddress: trusteeWallet.address });
+  await page.route(/\/api\/v1\/accounts\/0x[0-9a-f]+/i, route => {
+    const trustee = route.request().url().toLowerCase().includes(trusteeWallet.address.toLowerCase());
+    const selected = trustee ? trusteeWallet : wallet;
+    return route.fulfill({ json: { account: trustee ? "0.0.124" : "0.0.123", deleted: false, evm_address: selected.address, key: { _type: "ECDSA_SECP256K1", key: selected.signingKey.compressedPublicKey.slice(2) } } });
+  });
+  await page.goto("/pools");
+  await page.getByRole("button", { name: "Connect Hedera wallet" }).click();
+  await page.getByRole("button", { name: "MetaMask", exact: true }).click();
+  await page.getByRole("button", { name: /Sign in with wallet/ }).click();
+  await expect(page.getByText(/Signed in as 0.0.123/)).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Create pool" }).click();
+  const dialog = page.getByRole("dialog", { name: "Create a receivables pool" });
+  await dialog.getByRole("radio", { name: /Import CSV/ }).check();
+  await dialog.getByLabel("Receivables CSV").setInputFiles({ name: "bad.csv", mimeType: "text/csv", buffer: Buffer.from("fuId,faceValue\nFU-001,10") });
+  await dialog.getByRole("button", { name: "Review import" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("CSV header");
+  await dialog.getByRole("radio", { name: /Prepared receivables/ }).check();
+  await dialog.getByRole("button", { name: "Review import" }).click();
+  await expect(dialog.getByRole("table").getByRole("row")).toHaveCount(11);
+  await expect(dialog.getByText("FU-011", { exact: true })).toBeVisible();
+  await dialog.getByRole("button", { name: "Review terms" }).click();
+  await dialog.getByLabel("Pool name").fill("Browser-reviewed pool");
+  await dialog.getByLabel("Trustee account").fill("0.0.124");
+  await dialog.getByRole("button", { name: "Save draft pool" }).click();
+  await expect(page.getByRole("heading", { name: "Draft pool saved" })).toBeVisible();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
+  await page.reload();
+  await page.getByRole("button", { name: "Open draft" }).click();
+  const reopened = page.getByRole("dialog", { name: "Browser-reviewed pool" });
+  await reopened.getByRole("button", { name: "Review terms" }).click();
+  await expect(reopened.getByLabel("Trustee account")).toHaveValue("0.0.124");
+  await reopened.getByLabel("Pool name").fill("Browser revision two");
+  await expect(reopened.getByRole("button", { name: "Approve reviewed draft" })).toHaveCount(0);
+  await reopened.getByRole("button", { name: "Save draft pool" }).click();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
+  signingWallet = trusteeWallet;
+  await page.evaluate(() => (window as unknown as { switchDraftTrustee: () => void }).switchDraftTrustee());
+  await page.getByRole("button", { name: "Wallet 0.0.124, Hedera testnet" }).click();
+  await page.getByRole("button", { name: "Sign in with wallet" }).click();
+  await expect(page.getByText(/Signed in as 0.0.124/)).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Open draft" }).click();
+  const finalReview = page.getByRole("dialog", { name: "Browser revision two" });
+  await finalReview.getByRole("button", { name: "Review terms" }).click();
+  await finalReview.getByRole("checkbox").check();
+  await finalReview.getByRole("button", { name: "Approve reviewed draft" }).click();
+  await expect(page.getByRole("heading", { name: "Trustee approval saved" })).toBeVisible();
+  await expect(page.getByText(/Review version 2 and its terms are approved/)).toBeVisible();
+  await page.getByRole("button", { name: "Done", exact: true }).click();
+  await expect(page.getByText(/Trustee-approved draft/)).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open draft" }).click();
+  await page.getByRole("button", { name: "Issuance & eligibility" }).click();
+  const issuanceDialog = page.getByRole("dialog", { name: "Issue approved security" });
+  await expect(issuanceDialog.getByText(/awaits a verified deployment and dedicated signers/)).toBeVisible();
+  await expect(issuanceDialog.getByRole("button", { name: "Request issuance" })).toBeDisabled();
+  await page.getByRole("button", { name: "Close issuance" }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: "/tmp/receivablex-pool-draft-mobile.png", fullPage: true });
+});

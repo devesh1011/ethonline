@@ -1,0 +1,56 @@
+{
+  "capturedAt": "2026-09-13T03:47:08.000Z",
+  "description": "Read-only public workspace snapshot for presentation regression; not live execution evidence.",
+  "pool": {
+    "id": "0xe9c0ce93f9253eb21b5128147d8f45aad7e19ec5a004311ea8209ffee392e14f",
+    "name": "ReceivableX rx-ethonline-v3-20260913",
+    "state": "AMORTIZING",
+    "stateVersion": "5",
+    "originalFaceMinorUnits": "1000000000",
+    "performingFaceMinorUnits": "999999099",
+    "delinquentFaceMinorUnits": "0",
+    "defaultedFaceMinorUnits": "0",
+    "estimatedRecoveriesMinorUnits": "0",
+    "realizedLossesMinorUnits": "0",
+    "principalWrittenDownMinorUnits": "0",
+    "availableCashMinorUnits": "0",
+    "reservedCashMinorUnits": "901",
+    "principalOutstandingMinorUnits": "980000000",
+    "registryAddress": "0x0000000000000000000000000000000000a0775a",
+    "securityAddress": "0xaB3F9072f7801A269A8783D8B803F4632f420b17",
+    "payoutAddress": "0xCbA15bb5eBfD5C39854D2abC03Cd660228E84b86",
+    "paymentTokenId": "0.0.10516124"
+  },
+  "operations": [
+    {
+      "id": "2647d060-961e-45ed-9a6e-5bf6776b0adf",
+      "operationType": "DISTRIBUTION",
+      "state": "UNKNOWN",
+      "phase": "RECORDING",
+      "poolId": "0xe9c0ce93f9253eb21b5128147d8f45aad7e19ec5a004311ea8209ffee392e14f",
+      "transactionId": "0x95d66e9efb4ae396089b994e13cd22960289bdbae74df27ff765f1f6a03c7483",
+      "outcome": null,
+      "error": "Awaiting original distribution transaction receipt; no replacement will be signed"
+    },
+    {
+      "id": "d9bb914e-89c4-49f6-bedc-15d8b9406302",
+      "operationType": "RECORD_COLLECTION",
+      "state": "RECONCILED",
+      "phase": "COMPLETE",
+      "poolId": "0xe9c0ce93f9253eb21b5128147d8f45aad7e19ec5a004311ea8209ffee392e14f",
+      "transactionId": "0.0.10516053@1789271183.773520790",
+      "outcome": "SUCCESS",
+      "error": null
+    },
+    {
+      "id": "83ff7c53-6a13-4ca6-bf32-637d19e25c8d",
+      "operationType": "FINANCING",
+      "state": "RECONCILED",
+      "phase": "COMPLETE",
+      "poolId": "0xe9c0ce93f9253eb21b5128147d8f45aad7e19ec5a004311ea8209ffee392e14f",
+      "transactionId": "0x7c91fb3ff731abe1413f41fc75aa33235d70815f767f3e9eca4a41c0e6a0c5ae",
+      "outcome": null,
+      "error": null
+    }
+  ]
+}
