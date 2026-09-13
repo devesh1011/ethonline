@@ -1,81 +1,126 @@
 # ReceivableX
 
-Pool synthetic financed receivables, issue securities through Hedera Asset Tokenization Studio, record collections, and distribute payments to verified record-date holders.
+Receivables finance, from pool creation to investor repayment. Built on Hedera testnet.
 
-This is a Hedera testnet prototype. Business records and credentials are synthetic; settlement tokens have no monetary value. There is no recorded institutional pilot, legal-compliance certification or security audit.
+[Open the app](https://devesh1011.github.io/receivablex-ethonline-2026/) · [View verification](https://devesh1011.github.io/receivablex-ethonline-2026/proof/)
 
-[Public application](https://devesh1011.github.io/receivablex-ethonline-2026/) · [Live verification](https://devesh1011.github.io/receivablex-ethonline-2026/proof/) · [Submission readiness](docs/submission-readiness.md)
+ReceivableX is a workspace for managing pools of already-financed receivables. An originator prepares the assets, a trustee reviews the terms, and investors can follow their holdings and repayments. Collections, overdue assets, recovery estimates and distributions stay connected to the pool's records.
 
-The public application now uses run `rx-ethonline-v3-20260913`: Registry v3 `0.0.10516314`, ATS security `0.0.10516668`, payout adapter `0.0.10516754` and settlement token `0.0.10516124`. Historical evidence remains separate and unchanged.
+The prototype models financed receivables from India's Trade Receivables Discounting System (TReDS). It uses synthetic business records and credentials, with testnet settlement tokens that have no cash value. It has no live TReDS or bank settlement integration.
 
-Receipt-backed acceptance covers [50-step setup](docs/evidence/v3-setup.json), [paid primary financing and initial 600/350/50 holdings](docs/evidence/v3-financing.json), [exact 901-minor-unit payout with association-block recovery](docs/evidence/v3-payout-recovery.json), and [delinquency/default/recovery revision with exact replay](docs/evidence/v3-servicing.json). Financial acceptance uses generated test actors. Human MetaMask connection/sign-in was separately observed; human subscription approval and live future-maturity closure are not claimed. The blocked payout was rejected in preflight, not manufactured as a failed consensus transaction.
+## What you can do
 
-## Integration and scope
+1. Prepare a pool, review asset eligibility and submit it for trustee approval.
+2. Issue a security through Hedera Asset Tokenization Studio (ATS), apply credential checks and record investor subscriptions.
+3. Record collections and track delinquency, defaults and revised recovery estimates.
+4. Take an ownership snapshot, approve a distribution and follow the payment outcome for each holder.
+5. Inspect commitments, transaction receipts and unresolved operations in the audit and verification views.
 
-`@receivablex/hedera-ats` uses the official `@hashgraph/asset-tokenization-contracts@8.0.0` ABIs through ethers. It integrates ATS issuance, roles, credential grants, transfers and immutable snapshots directly; the unused high-level ATS SDK was removed. Native transfers/association use the Hiero SDK. See [ATS integration](docs/ats-integration.md).
+The interface separates recorded data from live backend data. Actions depend on the connected account's role and the configured backend. Browsing a pool does not require an account with permission to change it.
 
-The custom Registry and SnapshotPayoutAdapter implement a principal-first cash waterfall with deterministic largest-remainder allocation, exact committed totals and one-holder payout transactions. They are not an unmodified LifeCycleCashFlow integration. Zero entitlements need no payment; failures remain unresolved while other recipients can proceed. Durable journals preserve signed bytes and original identities before broadcast, reconcile unknown outcomes and retain failed attempt history.
+## How repayment works
 
-Implemented source workflows include pool preparation/trustee approval, ATS issuance, KYC-gated financing, collections, distributions, servicing, maturity/redemption and controlled recovery. Economic features default disabled until configured signers, current chain state and the deployed capability version pass validation. A draft, local test or wallet request is never a confirmed chain payment.
+The custom [ReceivablePoolRegistry](src/contracts/contracts/ReceivablePoolRegistry.sol) records pool state and approved distributions. [SnapshotPayoutAdapter](src/contracts/contracts/SnapshotPayoutAdapter.sol) handles payments against ownership snapshots.
+
+Payments repay principal first. The allocation logic works in integer minor units and assigns rounding remainders deterministically, so individual entitlements add up to the approved total. Each holder has a separate payout transaction. A blocked recipient can remain unresolved while other recipients receive payment; a zero entitlement needs no transfer.
+
+The worker stores signed transaction bytes and their identities before broadcasting. If a result is unknown, it reconciles the original transaction. The operation journal retains attempts and failures so an operator can inspect what happened before deciding how to recover.
+
+ATS supplies issuance, roles, credential grants, transfers and immutable ownership snapshots through the official contract ABIs. The Hiero SDK handles native Hedera operations, including token transfers and association. The registry and payout rules are custom contracts; this is not an unmodified ATS LifeCycleCashFlow integration.
 
 ## Project layout
 
-```text
-src/
-  web/             Next.js interface and wallet connection
-  api/             HTTP API, wallet authentication, authorized workflow commands
-  worker/          Background transaction processing and reconciliation
-  contracts/       Solidity contracts, deployment, and contract tests
-  domain/          Shared pool, collection, and payout calculations
-  db/              PostgreSQL access and migrations
-  hedera-ats/       Asset Tokenization Studio integration
-  hedera-native/    Native token transactions and Mirror Node access
-docs/              Product plans, development guide, and backlog
-  evidence/        Testnet receipts and reproducible verification fixtures
-  research/        Supporting source audits and feasibility notes
-scripts/           Testnet setup, acceptance, and verification commands
-  deploy/aws/      Backend deployment scripts, Docker, and Caddy config
-```
+Each directory under `src/` is an npm workspace. Run commands from the repository root.
 
-Each directory under `src/` is an npm workspace. Shared imports such as `@receivablex/domain` let the API, worker, and frontend use the same business rules. Run npm commands from the repository root; install dependencies once.
+| Directory | Responsibility |
+| --- | --- |
+| [src/web](src/web) | Next.js interface, wallet connection and verification views |
+| [src/api](src/api) | Wallet authentication, role checks and workflow commands |
+| [src/worker](src/worker) | Background processing, transaction submission and reconciliation |
+| [src/domain](src/domain) | Shared pool rules, servicing calculations and payout allocation |
+| [src/db](src/db) | PostgreSQL migrations and projections |
+| [src/contracts](src/contracts) | Solidity contracts, Hardhat configuration and contract tests |
+| [src/hedera-ats](src/hedera-ats) | Asset Tokenization Studio adapter |
+| [src/hedera-native](src/hedera-native) | Native Hedera transactions and Mirror Node access |
+| [scripts](scripts) | Setup, acceptance, evidence verification and operations tools |
 
-## Local development
+## Run locally
 
-Use Node.js 22 and PostgreSQL 16 (or Docker). For a secret-free interface, start with:
+Use Node.js 22 and npm. PostgreSQL 16 is needed for backend workflows and the full test suite.
+
+### Included evidence fixtures
+
+The repository includes the public historical inputs in [fixtures/evidence](fixtures/evidence/README.md):
+
+- `product-baseline.json`, imported by the frontend's workspace data module.
+- `testnet-evidence.json`, loaded by the native runtime.
+- Contract verification metadata and recorded network responses for offline tests.
+
+A fresh clone includes these fixtures. Builds and browser checks validate that they are present and parseable. They contain historical public records and synthetic business data, not current balances or signing credentials. Narrative documentation and local reports under `docs/` remain ignored.
+
+### Start the interface
+
+Install dependencies and start the development server:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-The frontend runs at `http://localhost:3000`; without a live API, historical data remains explicitly read-only. For full isolated automated verification, start a local PostgreSQL database as described in [CI](docs/ci.md), then run:
+Open `http://localhost:3000`. Without a live API, the interface shows recorded data and keeps transaction actions unavailable. You do not need signing keys to browse it.
+
+To connect an existing backend, set `NEXT_PUBLIC_API_URL` in `src/web/.env.local`. The [web environment template](src/web/.env.example) also lists the optional Reown project ID for WalletConnect. Never put private keys in a `NEXT_PUBLIC_*` variable.
+
+### Run the checks
+
+Use a checkout without private `.env` files. The included Docker Compose service starts a local PostgreSQL database with the credentials expected by the test harnesses:
 
 ```sh
+docker compose up -d --wait postgres
+npx playwright install chromium
 npm run ci
 npm run ci:browser
 npm run ci:browser:signed
 npm run ci:pages
 ```
 
-Browser tests use local signed authentication and controlled chain/wallet transports, not real chain transactions or human wallet approvals. Native association/payment acceptance remains a separate receipt-backed testnet exercise. Dependency exceptions are documented; a passing CI audit gate is not a clean dependency graph.
+Run these sequentially because the browser checks share Next.js build output. On Linux, use `npx playwright install --with-deps chromium` if browser system dependencies are missing.
 
-For a new testnet run, first review the plan without using a signing key:
+`npm run ci` runs lint, type checks, script validation, builds, migrations, tests and the dependency audit policy. The browser commands cover recorded-data browsing, authenticated workflows with controlled transports, and static export behavior. Reports go to `.claude/reports/ci/`.
+
+The browser tests do not submit real chain payments or exercise a human's wallet approval. The dependency audit allows [reviewed exceptions](scripts/ci/audit-exceptions.json), so a passing gate does not mean the dependency graph is vulnerability-free.
+
+## Testnet setup and deployment
+
+The setup tools create an isolated run with its own roles, configuration and checkpoints. Start by compiling the contracts and reviewing a plan:
 
 ```sh
-npm run testnet:setup -- --new --run-id YOUR-RUN --plan
+npm exec --workspace @receivablex/contracts -- hardhat --config hardhat.local.config.ts compile
+npm run testnet:setup -- --new --run-id my-testnet-run --plan
 npx tsx scripts/run-acceptance.ts --plan
 ```
 
-Execution is an explicit, budgeted coordinator action. Follow [setup/checkpoints](docs/testnet-setup-runbook.md), [operations and key-file loading](docs/operations-runbook.md), and [AWS handoff](scripts/deploy/aws/README.md). Never copy an administrator/operator/holder key into an online runtime. The current exposed operator-key exception is testnet-only and is not a claim of rotation.
+These commands request plans, not funded execution. Executing a run requires configured signing keys, an explicit HBAR budget and review of the selected network and accounts. Workflow commands remain disabled until the required signers and deployed capabilities pass validation.
 
-## Further reading
+The [AWS deployment guide](scripts/deploy/aws/README.md) covers backend packaging, runtime configuration and operations. Keep operator, administrator and investor keys out of the online runtime. The existing operator-key exposure exception applies only to testnet and does not establish that the key has been rotated.
 
-- [Architecture](docs/architecture.md) and [product design](docs/product.md)
-- [Implementation specification](docs/implementation.md) and [current backlog](docs/todo.md)
-- [Testnet verification records](docs/evidence/README.md)
-- [AWS deployment](scripts/deploy/aws/README.md)
-- [CI and reproducible checks](docs/ci.md), [dependency review](docs/dependency-review.md)
-- [Run-bound contract verification](docs/contract-verification.md)
-- [Submission checklist](docs/submission-readiness.md) and [3:45 demo storyboard](docs/demo-storyboard.md)
+## Recorded testnet run
 
-AI assistance was used extensively across implementation, tests, UI iteration and documentation. The owner must supply the precise team contribution, work-history and track declaration described in submission readiness before submitting; this repository does not assert eligibility on their behalf.
+The existing project records identify run `rx-ethonline-v3-20260913` with these Hedera testnet entities:
+
+| Entity | ID |
+| --- | --- |
+| Registry v3 | `0.0.10516314` |
+| ATS security | `0.0.10516668` |
+| Payout adapter | `0.0.10516754` |
+| Settlement token | `0.0.10516124` |
+
+The recorded acceptance work covers paid primary financing with initial holdings of 600/350/50 units, a distribution totaling exactly 901 minor units, and delinquency/default/recovery revisions with exact replay. The payout recovery case caught a missing token association before submission; it was not a failed consensus transaction.
+
+Financial acceptance used generated test actors. Human MetaMask connection and sign-in were observed separately. Human subscription approval and live closure at future maturity remain unverified, even though the source includes maturity and redemption workflows. The underlying receipt files live in the evidence bundle excluded from this repository.
+
+## Prototype scope
+
+ReceivableX has no recorded institutional pilot, legal-compliance certification or security audit. Synthetic credentials do not establish institutional KYC, and chain receipts alone do not establish legal assignment of receivables or bank settlement.
+
+AI assistance contributed extensively to implementation, tests, UI work and documentation. Team contributions, development history and hackathon eligibility require a separate declaration by the project owner.
