@@ -50,30 +50,6 @@ The security is an ATS contract; the settlement asset is an HTS token. Their lif
 
 This integration uses ATS contracts directly, not the high-level ATS SDK. The registry and payout rules are custom contracts; the full ATS `LifeCycleCashFlow` stack is not integrated. No secondary marketplace, oracle pricing or Hedera Scheduled Transactions are claimed.
 
-## Recorded testnet run
-
-The public evidence below describes run `rx-ethonline-v3-20260913`. It is a dated acceptance record, not a claim about current pool balances.
-
-| Entity | Hedera testnet | Recorded source-verification status |
-| --- | --- | --- |
-| Registry v3 | [0.0.10516314](https://hashscan.io/testnet/contract/0.0.10516314) | Exact runtime match; creation verification unavailable |
-| ATS security | [0.0.10516668](https://hashscan.io/testnet/contract/0.0.10516668) | Created through ATS; this bundle makes no separate source-verification claim for it |
-| Payout adapter | [0.0.10516754](https://hashscan.io/testnet/contract/0.0.10516754) | Exact creation and runtime match |
-| Settlement token | [0.0.10516124](https://hashscan.io/testnet/token/0.0.10516124) | Native HTS token; two decimals |
-
-| Demonstrated operation | Inspect the evidence |
-| --- | --- |
-| ATS issuance, registered issuer and custody KYC | [Security creation receipt](https://hashscan.io/testnet/transaction/0xd0d1d1fa06a60e8ec81c0e6ccac3e29e604e227e350fbdc7a678abd1ab217376), [issuance and financing records](fixtures/evidence/v3/financing.json) |
-| Paid primary financing and initial holdings of 600/350/50 units | [Pool activation receipt](https://hashscan.io/testnet/transaction/0x7c0fa9af215c9cba8abc8623ea5cc731ef6afd2ab4c1fb8acb42e8ce05db3fda), [subscription payments](fixtures/evidence/v3/financing.json) |
-| Distribution of exactly 901 minor units with zero rounding dust | [Finalization receipt](https://hashscan.io/testnet/transaction/0x04c428f5fb4667819e7a74ba00a8eb42cc285a79d565b65b3afbc9403ea9c9f2), [snapshot, entitlements and payment attempts](fixtures/evidence/v3/payout-recovery.json) |
-| Delinquency, default and recovery revision with exact replay | [Servicing receipts and before/after accounting](fixtures/evidence/v3/servicing.json) |
-
-The distribution snapshot contains holdings of **599/350/50/1**, after a one-unit transfer to a payout probe account. That account lacked token association, so its first payout was blocked **before submission**. After correction, the payout completed. This demonstrates preflight-block recovery, not a failed consensus transaction.
-
-[V3 evidence guide](fixtures/evidence/v3/README.md) explains the scope and links to each phase. [Source-verification metadata](fixtures/evidence/v3/contract-verification.json) preserves the Registry's partial verification status. The separate [September 11 V2 fixtures](fixtures/evidence/README.md) support historical fallback and offline tests; they are not evidence for this V3 run.
-
-Acceptance receipts use generated test actors. They do not establish human-wallet subscription approval or a completed maturity-to-closure run.
-
 ## Project layout
 
 Each directory under `src/` is an npm workspace. Run commands from the repository root.
@@ -94,16 +70,6 @@ Each directory under `src/` is an npm workspace. Run commands from the repositor
 
 Use Node.js 22 and npm. PostgreSQL 16 is needed for backend workflows and the full test suite.
 
-### Included evidence fixtures
-
-The repository includes the public historical inputs in [fixtures/evidence](fixtures/evidence/README.md):
-
-- September 11 V2 `product-baseline.json`, imported by the frontend's workspace data module.
-- September 11 V2 `testnet-evidence.json`, loaded for legacy runtime bindings.
-- V2 contract verification metadata and recorded network responses for offline tests.
-- September 13 [V3 acceptance records](fixtures/evidence/v3/README.md), separate from the historical runtime inputs.
-
-A fresh clone includes these fixtures. Builds and browser checks validate the required V2 runtime inputs; the V3 files are separate acceptance records. These files contain historical public records and synthetic business data, not current balances or signing credentials. Narrative documentation and local reports under `docs/` remain ignored.
 
 ### Start the interface
 
@@ -150,13 +116,3 @@ npx tsx scripts/run-acceptance.ts --plan
 These commands request plans, not funded execution. Executing a run requires configured signing keys, an explicit HBAR budget and review of the selected network and accounts. Workflow commands remain disabled until the required signers and deployed capabilities pass validation.
 
 The [AWS deployment guide](scripts/deploy/aws/README.md) covers backend packaging, runtime configuration and operations. Keep operator, administrator and investor keys out of the online runtime.
-
-## Prototype scope
-
-ReceivableX has no recorded institutional pilot, legal-compliance certification or security audit. Synthetic credentials do not establish institutional KYC, and chain receipts alone do not establish legal assignment of receivables or bank settlement.
-
-Collection requests use authenticated servicer permissions and dedicated backend signers. They do not request a new signature from the connected wallet for each collection. Investor subscription payments use wallet approval.
-
-An operator key used during testnet development was exposed, and rotation has not been verified. Do not reuse that credential outside this testnet run.
-
-AI assistance contributed extensively to implementation, tests, UI work and documentation. Team contributions, development history and hackathon eligibility require a separate declaration by the project owner.
