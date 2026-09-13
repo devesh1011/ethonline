@@ -5,7 +5,7 @@ import { collectionCommandIdentity, type CollectionCommand } from "@receivablex/
 const path = process.argv[2];
 if (!path) throw new Error("Usage: tsx scripts/export-p0-acceptance.ts .local/p0-acceptance-result-<host>-<port>.json");
 const result = JSON.parse(await readFile(path, "utf8"));
-const baseline = JSON.parse(await readFile(new URL("../docs/evidence/testnet-evidence.json", import.meta.url), "utf8"));
+const baseline = JSON.parse(await readFile(new URL("../fixtures/evidence/testnet-evidence.json", import.meta.url), "utf8"));
 const artifact = JSON.parse(await readFile(new URL("../src/contracts/artifacts/contracts/ReceivablePoolRegistry.sol/ReceivablePoolRegistry.json", import.meta.url), "utf8"));
 const abi = new Interface(artifact.abi);
 const command = result.request as CollectionCommand;

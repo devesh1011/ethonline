@@ -18,7 +18,7 @@ export interface RuntimePoolContext {
   records: FactoringUnit[];
 }
 
-export const historicalEvidence = JSON.parse(await readFile(new URL("../../../docs/evidence/testnet-evidence.json", import.meta.url), "utf8"));
+export const historicalEvidence = JSON.parse(await readFile(new URL("../../../fixtures/evidence/testnet-evidence.json", import.meta.url), "utf8"));
 const entityId = (input: unknown) => {
   if (typeof input !== "string" || !/^0\.0\.[1-9][0-9]*$/.test(input)) throw new Error("Runtime manifest requires resolved numeric Hedera entity IDs");
   return input;

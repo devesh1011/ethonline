@@ -77,9 +77,9 @@ export async function initializeRunDatabase(store: SetupStore, plan: SetupPlan, 
 }
 async function importLegacyReference(store: SetupStore) {
   if (await store.maybe("legacy-public-reference.json")) return;
-  const raw = await readFile(join(root, "docs/evidence/testnet-evidence.json"), "utf8"), evidence = JSON.parse(raw);
+  const raw = await readFile(join(root, "fixtures/evidence/testnet-evidence.json"), "utf8"), evidence = JSON.parse(raw);
   const identifier = (value: unknown) => typeof value === "string" && (/^0\.0\.[1-9]\d*$/.test(value) || /^0x[0-9a-fA-F]{40,64}$/.test(value)) ? value : null;
-  await store.put("legacy-public-reference.json", { source: "docs/evidence/testnet-evidence.json", sourceSha256: createHash("sha256").update(raw).digest("hex"), policy: "READ_ONLY_REFERENCE_NOT_EXECUTION_AUTHORITY", registryId: identifier(evidence.registry?.contractId), registryAddress: identifier(evidence.registry?.address), securityId: identifier(evidence.ats?.securityId), securityAddress: identifier(evidence.ats?.securityAddress), paymentTokenId: identifier(evidence.inrx?.tokenId), importedActorKeys: false });
+  await store.put("legacy-public-reference.json", { source: "fixtures/evidence/testnet-evidence.json", sourceSha256: createHash("sha256").update(raw).digest("hex"), policy: "READ_ONLY_REFERENCE_NOT_EXECUTION_AUTHORITY", registryId: identifier(evidence.registry?.contractId), registryAddress: identifier(evidence.registry?.address), securityId: identifier(evidence.ats?.securityId), securityAddress: identifier(evidence.ats?.securityAddress), paymentTokenId: identifier(evidence.inrx?.tokenId), importedActorKeys: false });
 }
 
 export async function writePublicConfiguration(store: SetupStore, preflight: Record<string, any>, plan: SetupPlan, state: SetupState) {

@@ -5,7 +5,7 @@ import { productEvidence } from "./product-evidence.js";
 
 const read = async (name: string) =>
   JSON.parse(
-    await readFile(new URL(`../docs/evidence/${name}`, import.meta.url), "utf8")
+    await readFile(new URL(`../fixtures/evidence/${name}`, import.meta.url), "utf8")
   );
 const baseline = await read("testnet-evidence.json");
 const source = await read("contract-verification.json");

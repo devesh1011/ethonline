@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { productEvidence, compactNetworkFixtures } from "./product-evidence.js";
-const root = new URL("../docs/evidence/", import.meta.url);
+const root = new URL("../fixtures/evidence/", import.meta.url);
 const evidence = JSON.parse(
   await readFile(new URL("testnet-evidence.json", root), "utf8")
 );

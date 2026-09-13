@@ -1,4 +1,4 @@
-import evidenceJson from "../../../docs/evidence/product-baseline.json";
+import evidenceJson from "../../../fixtures/evidence/product-baseline.json";
 import { buildPool, demoFactoringUnits } from "@receivablex/domain";
 
 export interface WorkspaceData {

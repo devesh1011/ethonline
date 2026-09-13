@@ -16,7 +16,7 @@ import { historicalRegistry } from "./evidence-verifier.js";
 const root = new URL("../", import.meta.url);
 const read = async (path: string) =>
   JSON.parse(await readFile(new URL(path, root), "utf8"));
-const evidence = await read("docs/evidence/testnet-evidence.json");
+const evidence = await read("fixtures/evidence/testnet-evidence.json");
 // This particular artifact contains public actor addresses, never account keys.
 const ats = evidence.ats.actors
   ? evidence.ats
@@ -260,7 +260,7 @@ for (const [name, actor] of Object.entries(evidence.ats.actors) as [
 }
 for (const entity of [evidence.registry, evidence.payoutAdapter])
   await capture(`contracts/${entity.contractId}`);
-const sourceVerification = await read("docs/evidence/contract-verification.json");
+const sourceVerification = await read("fixtures/evidence/contract-verification.json");
 for (const contract of sourceVerification.contracts) {
   const path = `https://sourcify.dev/server/v2/contract/296/${contract.address}?fields=creationMatch,runtimeMatch,deployment`;
   await capture(path);
@@ -288,15 +288,15 @@ const stringify = (value: unknown) =>
     2
   )}\n`;
 await writeFile(
-  new URL("docs/evidence/testnet-evidence.json", root),
+  new URL("fixtures/evidence/testnet-evidence.json", root),
   stringify(evidence)
 );
 await writeFile(
-  new URL("docs/evidence/product-baseline.json", root),
+  new URL("fixtures/evidence/product-baseline.json", root),
   stringify(productEvidence(evidence))
 );
 await writeFile(
-  new URL("docs/evidence/historical-network-fixtures.json", root),
+  new URL("fixtures/evidence/historical-network-fixtures.json", root),
   stringify(compactNetworkFixtures(fixtures))
 );
 console.log(

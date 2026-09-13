@@ -1,0 +1,282 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-11T10:35:58.782Z",
+  "network": "testnet",
+  "chainId": 296,
+  "simulatedBusinessData": true,
+  "dataAsOf": "2026-09-11T10:35:52.285Z",
+  "ats": {
+    "securityId": "0.0.10474272",
+    "securityAddress": "0xb94371c9914df4835ee7149a6c2457b04bfdc45f",
+    "snapshotId": "1",
+    "balances": {
+      "originator": "50",
+      "investorA": "600",
+      "investorB": "350",
+      "ineligible": "0",
+      "supply": "1000"
+    },
+    "actors": {
+      "originator": {
+        "accountId": "0.0.10474264",
+        "evmAddress": "0x565106aa023774becc27214d263275675dc69e22"
+      },
+      "investorA": {
+        "accountId": "0.0.10474265",
+        "evmAddress": "0x651e76bf7d81c0797265a0e58bceae71454ac475"
+      },
+      "investorB": {
+        "accountId": "0.0.10474267",
+        "evmAddress": "0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44"
+      },
+      "ineligible": {
+        "accountId": "0.0.10474266",
+        "evmAddress": "0xd00c67593946dc8bd3c6f8aa478909da19d22cf1"
+      }
+    },
+    "configuration": {
+      "factoryAddress": "0xd1f118a40f3b02883d35909ef2517e7edd78379d",
+      "factoryContractId": "0.0.9213391",
+      "resolver": "0xBA2D5FC2083A0b8f164c50e65d782087fBA18E0a",
+      "key": "0x0000000000000000000000000000000000000000000000000000000000000002",
+      "version": "1",
+      "nominalValue": "980000",
+      "nominalValueDecimals": 2,
+      "startingDate": 1789122089,
+      "maturityDate": 1789726769,
+      "internalKycActivated": true
+    },
+    "transactions": {
+      "createSecurity": "0x56a744e98882631adb285931f14e1e859f0289687f0141d358611b449d172293",
+      "grantRole:0x5eeaf5602c75bf26e73b5206d0bd6ee82f621166255e5fd73cc06bc7bd84a95f": "0x0ff96e5e7167398b64b0c532ac007af9639c91a69855cbf9f5904bde0b08ba41",
+      "grantRole:0xf7d999723d2160432933a2aeffaae83e262a5a46fe94f34614a7676d1d1f67c6": "0xc03b82252a22573647ae6c840a0a39f67554bb418ff4a91076ad9a4a5148336f",
+      "grantRole:0x3120494a82251fe85b0403877539486dbfcf0f94c20741a3229cfad31f625ee1": "0xbccaaf686e50c9e7197501e64ad466497f4fc2c0329caa8cc0818c7753ad8924",
+      "grantRole:0x754f499f9fdfbb089d12bdec817a6863d593d8a3ea7f546c00a5cafd20957bfc": "0x32dbba034237e693ee5baea90230d5a795438bbf5a743fd45b0ed7355e7d2ae2",
+      "addIssuer": "0x7ca8360362cb0079c44bf79f652c7fea7c99d7c511d3e55bc3f6ea5e56a7ec78",
+      "grantKyc:0x565106aa023774becc27214d263275675dc69e22": "0x03288b77faf0d3fc77afa73026a73b780f50d177233dccd62caf16839f19cd28",
+      "grantKyc:0x651e76bf7d81c0797265a0e58bceae71454ac475": "0xee105b6d1a14f168fd2aff5cceec512b7aad2dc5b4cb7a0258e3a7b0d711aa09",
+      "grantKyc:0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44": "0xe5f77931cee166b4ecb72163d8a0c2f2f5497b2b35ae270c3d7d7da43a589e0c",
+      "issueByPartition": "0xaba1f9accec54c82a5456a7f5b402d47d25b7e6660537ef0e6192dcc27e9ba17",
+      "transferByPartition:0x651e76bf7d81c0797265a0e58bceae71454ac475": "0xe5eb4c256e252bf57d189895bbaec0cb40fd1a4141673e379db39b7e4a70b5c3",
+      "transferByPartition:0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44": "0xb4868f10590ccc62dccdceafc98c5a290e5c359a0de3b051b06d47bfa435af89",
+      "takeSnapshot": "0xfa5c357f6169e1e8633949f7d5bc8b767cf162959e81f790065787c17aa3f318"
+    }
+  },
+  "inrx": {
+    "tokenId": "0.0.10474270",
+    "tokenAddress": "0x00000000000000000000000000000000009fd31e",
+    "participantBalances": {
+      "originator": "509900000",
+      "investorA": "418800000",
+      "investorB": "269300000",
+      "ineligible": "0"
+    },
+    "decimals": 2
+  },
+  "registry": {
+    "contractId": "0.0.10474425",
+    "address": "0x66b2eFF8bc71DC76A42993E3Ad587c16505424Ad"
+  },
+  "payoutAdapter": {
+    "contractId": "0.0.10474427",
+    "address": "0x461DcD66CA4a33f5b3a9f1228C2D416da5e31C59",
+    "productionTarget": "ATS LifeCycleCashFlow"
+  },
+  "pool": {
+    "poolId": "0xd45a8ed72760a4eca6cb1c87c79f99d417419a4de423c4b1aa983dff39c3a877",
+    "poolRoot": "0xc8ed7759a1d08960aeebf697e4640f7958bb0edf181556622ed20460871de3cc",
+    "eligibilityRoot": "0x3cd44eaf32f56863ae19bee43be3350cc361e94a8e176bbe53fc61320d60d788",
+    "accepted": 10,
+    "rejected": [
+      {
+        "fuId": "FU-011",
+        "reasons": [
+          "BUYER_NOT_ACCEPTED"
+        ]
+      },
+      {
+        "fuId": "FU-012",
+        "reasons": [
+          "ASSIGNMENT_NOT_CONFIRMED"
+        ]
+      }
+    ],
+    "availableCash": "1000000",
+    "reservedCash": "0",
+    "principalOutstanding": "881000000",
+    "performingFaceOutstanding": "800000000",
+    "delinquentFaceOutstanding": "0",
+    "defaultedFaceOutstanding": "100000000",
+    "estimatedDefaultRecoveries": "40000000",
+    "chainMaturity": 1789727690,
+    "manifestHash": "0x8f779fb72db4996a8d4320cc92293999fee7c1ad7e15365f81f3e93b4d738e59",
+    "originalFaceValue": "1000000000",
+    "originalInvestorPrincipal": "980000000",
+    "trustee": "0xD9Cc6BFB7B21EDDe666c37d426A156e8611789fB",
+    "illustrativeWeightedDueDate": 1791288000,
+    "illustrativeWeightedMaturityDaysAtCreation": 25.059125391885086
+  },
+  "collection": {
+    "sourceEventId": "0xff1afd2a1c3d011624c914893f8d7169c4ae5f8f656860100b4848677ef23bbc",
+    "payloadHash": "0x063c273aab7c750e7e55aac4fc44b8f8419b223b86588368d80a288f676d630c",
+    "exactReplayIgnored": true,
+    "amount": "100000000",
+    "fuId": "FU-001",
+    "conflictingReplayEvidence": {
+      "status": "unverified-historical-simulation",
+      "reason": "Original run used an unrecorded staticCall and caught any error. No consensus receipt proves conflict rejection."
+    }
+  },
+  "distribution": {
+    "distributionId": "0x916a8fa94986fbd520d318c59a1e684b2ebbc80dc9b6e2cdd3d85e0ef9bcf98e",
+    "entitlementRoot": "0x30aa4cc67d3b9ca785d7cf7cecfad9b8baae938911342d0c11aaaa4e39cb85e1",
+    "immutableTotal": "99000000",
+    "allocatedCash": "99000000",
+    "cashPaid": "99000000",
+    "principalPaid": "99000000",
+    "status": 4,
+    "entitlements": [
+      {
+        "holder": "0x565106aa023774becc27214d263275675dc69e22",
+        "snapshotBalance": "50",
+        "cashAmount": "4950000",
+        "principalAmount": "4950000",
+        "incomeAmount": "0"
+      },
+      {
+        "holder": "0x651e76bf7d81c0797265a0e58bceae71454ac475",
+        "snapshotBalance": "600",
+        "cashAmount": "59400000",
+        "principalAmount": "59400000",
+        "incomeAmount": "0"
+      },
+      {
+        "holder": "0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44",
+        "snapshotBalance": "350",
+        "cashAmount": "34650000",
+        "principalAmount": "34650000",
+        "incomeAmount": "0"
+      }
+    ]
+  },
+  "transactions": {
+    "deployRegistry": "0x581810ac13db28a2560083c0e7f4d230c6de33e65f15d5a14d3b96fb40fdaf55",
+    "deployPayoutAdapter": "0xff70950104ad0e14584f107f92cb82034ff3c515dbec9089c9524bf316efaa8c",
+    "grant:SERVICER_ROLE": "0x56fcfd5a06dd3e4794a252d6785e37dc13e04c4a714e4dc450bc3c408e9337d0",
+    "grant:TRUSTEE_ROLE": "0x3304f48bd0c6375f6808cf0fbf08f43202130cd865b757e64071e4b85ac9fec6",
+    "grant:PAYOUT_EXECUTOR_ROLE": "0x6164980bdf7c02331f0f17b998046d50de907b69a6ec6e043006bb21d9a2690a",
+    "createPool": "0x768779d0d482d40dd6f06558715fd91b16d26587601be85287f56d86c9077fb0",
+    "activatePool": "0x6bddd2143db43f67c14b89e4a76565618b22ad9964c22747304f85ae58609ac7",
+    "associatePayout": "0xcfa54053e0b8a00e55e673e611c4a1789e968c92e796c79fc048f1f16a6afb20",
+    "fundPayout": "0.0.6885490@1789122904.896200511",
+    "recordCollection": "0x5a6188aac71e4f457620ca49d1c8610127ab60ec6b7096c1b60bb59ed1e400a5",
+    "replayCollection": "0xd2f8e4dd02b00d6a0cb3f270c823f574b18f8b5ee6c47ae182a1e15d2b165624",
+    "approveDistribution": "0xd13c589dc18882c745919aaa31aa3354c8a6f47f9db6de743116dce6e3445ba1",
+    "executeDistribution": "0x13e4cb826b2073fb18657bfe3bebf7094fcd50562ce0a8f2e9411707d6081108",
+    "finalizeDistribution": "0x6607659f85a072c75c9b74bb706385d6dffad2832a6b589d2e167757a71e476f",
+    "markDelinquent": "0x7a62e02ae76440c02e5478d426b6924f66e40f69a3aae0d5d77479e162e7fc20",
+    "markDefault": "0x36c290c2b45782267029fb5f6933389bc77049989e9b4ab95deabb54e6ae26d7"
+  },
+  "verificationScope": {
+    "historicalRun": true,
+    "liveState": false,
+    "sourceCommit": "8ab01cc",
+    "ruleVersion": "treds-pool-v1",
+    "atsContractsVersion": "8.0.0",
+    "adapter": "custom SnapshotPayoutAdapter; not ATS LifeCycleCashFlow",
+    "unverifiedClaims": [
+      "Conflicting collection replay rejection was an unrecorded simulation",
+      "No institutional or legal validation",
+      "Original participant balances include transfers preceding this registry run"
+    ]
+  },
+  "transactionDetails": {
+    "deployRegistry": {
+      "consensusTimestamp": "1789122857.485620104"
+    },
+    "deployPayoutAdapter": {
+      "consensusTimestamp": "1789122864.412647303"
+    },
+    "grant:SERVICER_ROLE": {
+      "consensusTimestamp": "1789122871.784503724"
+    },
+    "grant:TRUSTEE_ROLE": {
+      "consensusTimestamp": "1789122878.628195104"
+    },
+    "grant:PAYOUT_EXECUTOR_ROLE": {
+      "consensusTimestamp": "1789122885.168356975"
+    },
+    "createPool": {
+      "consensusTimestamp": "1789122891.566141104"
+    },
+    "activatePool": {
+      "consensusTimestamp": "1789122898.247653038"
+    },
+    "associatePayout": {
+      "consensusTimestamp": "1789122904.492123104"
+    },
+    "fundPayout": {
+      "consensusTimestamp": "1789122910.411016104"
+    },
+    "recordCollection": {
+      "consensusTimestamp": "1789122913.165589126"
+    },
+    "replayCollection": {
+      "consensusTimestamp": "1789122919.908721664"
+    },
+    "approveDistribution": {
+      "consensusTimestamp": "1789122926.753320104"
+    },
+    "executeDistribution": {
+      "consensusTimestamp": "1789122932.928686104"
+    },
+    "finalizeDistribution": {
+      "consensusTimestamp": "1789122939.473176104"
+    },
+    "markDelinquent": {
+      "consensusTimestamp": "1789122945.867317104"
+    },
+    "markDefault": {
+      "consensusTimestamp": "1789122952.285623104"
+    },
+    "ats:createSecurity": {
+      "consensusTimestamp": "1789121972.148541885"
+    },
+    "ats:grantRole:0x5eeaf5602c75bf26e73b5206d0bd6ee82f621166255e5fd73cc06bc7bd84a95f": {
+      "consensusTimestamp": "1789121978.459040112"
+    },
+    "ats:grantRole:0xf7d999723d2160432933a2aeffaae83e262a5a46fe94f34614a7676d1d1f67c6": {
+      "consensusTimestamp": "1789121984.821064648"
+    },
+    "ats:grantRole:0x3120494a82251fe85b0403877539486dbfcf0f94c20741a3229cfad31f625ee1": {
+      "consensusTimestamp": "1789121991.319521745"
+    },
+    "ats:grantRole:0x754f499f9fdfbb089d12bdec817a6863d593d8a3ea7f546c00a5cafd20957bfc": {
+      "consensusTimestamp": "1789121997.649108104"
+    },
+    "ats:addIssuer": {
+      "consensusTimestamp": "1789122003.980348104"
+    },
+    "ats:grantKyc:0x565106aa023774becc27214d263275675dc69e22": {
+      "consensusTimestamp": "1789122010.807455785"
+    },
+    "ats:grantKyc:0x651e76bf7d81c0797265a0e58bceae71454ac475": {
+      "consensusTimestamp": "1789122017.268539942"
+    },
+    "ats:grantKyc:0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44": {
+      "consensusTimestamp": "1789122023.529597104"
+    },
+    "ats:issueByPartition": {
+      "consensusTimestamp": "1789122029.899182104"
+    },
+    "ats:transferByPartition:0x651e76bf7d81c0797265a0e58bceae71454ac475": {
+      "consensusTimestamp": "1789122036.348467877"
+    },
+    "ats:transferByPartition:0xc80dcda128c8b4fe8070a73b7c75bc0ae58ebd44": {
+      "consensusTimestamp": "1789122229.791236104"
+    },
+    "ats:takeSnapshot": {
+      "consensusTimestamp": "1789122236.813077104"
+    }
+  }
+}

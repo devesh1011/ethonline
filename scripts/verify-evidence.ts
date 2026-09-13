@@ -5,7 +5,7 @@ import { verifyEvidence } from "./evidence-verifier.js";
 const mirror = "https://testnet.mirrornode.hedera.com/api/v1/";
 const read = async (name: string) =>
   JSON.parse(
-    await readFile(new URL(`../docs/evidence/${name}`, import.meta.url), "utf8")
+    await readFile(new URL(`../fixtures/evidence/${name}`, import.meta.url), "utf8")
   );
 const cache = new Map<string, Promise<unknown>>();
 async function lookup(path: string) {

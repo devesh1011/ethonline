@@ -1,0 +1,27 @@
+{
+  "network": "hedera-testnet",
+  "chainId": 296,
+  "verifiedAt": "2026-09-11T10:41:31Z",
+  "contracts": [
+    {
+      "name": "ReceivablePoolRegistry",
+      "address": "0x66b2eFF8bc71DC76A42993E3Ad587c16505424Ad",
+      "contractId": "0.0.10474425",
+      "creationTransactionHash": "0x581810ac13db28a2560083c0e7f4d230c6de33e65f15d5a14d3b96fb40fdaf55",
+      "verificationId": "34e3766b-5136-4299-86fb-5424cb8c40d3",
+      "match": "exact_match",
+      "creationMatch": "exact_match",
+      "runtimeMatch": "exact_match"
+    },
+    {
+      "name": "SnapshotPayoutAdapter",
+      "address": "0x461DcD66CA4a33f5b3a9f1228C2D416da5e31C59",
+      "contractId": "0.0.10474427",
+      "creationTransactionHash": "0xff70950104ad0e14584f107f92cb82034ff3c515dbec9089c9524bf316efaa8c",
+      "verificationId": "ecfa5ac8-e982-4f2b-8b77-e3eed77e8f0c",
+      "match": "match",
+      "creationMatch": "match",
+      "runtimeMatch": "match"
+    }
+  ]
+}
