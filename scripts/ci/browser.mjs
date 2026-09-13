@@ -2,6 +2,9 @@ import { createServer } from "node:http";
 import { readFile, stat, copyFile } from "node:fs/promises";
 import { extname, join, resolve, sep } from "node:path";
 import { root, run, start, freePort, ready } from "./process.mjs";
+import { checkFixtureInputs } from "./check-fixtures.mjs";
+
+await checkFixtureInputs();
 
 const mode = process.argv[2] ?? "historical";
 if (!["historical", "signed", "pages"].includes(mode)) throw new Error("Use historical, signed or pages");

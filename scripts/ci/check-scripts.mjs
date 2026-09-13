@@ -11,4 +11,5 @@ async function visit(path) {
 await visit(join(root, "scripts"));
 await run("npm", ["exec", "--", "tsc", "-p", "scripts/tsconfig.ci.json"]);
 await run("node", ["--test", "scripts/ci/audit-policy.test.mjs"]);
+await run("node", ["--test", "scripts/ci/check-fixtures.test.mjs"]);
 await run("node", ["--test", "scripts/deploy/aws/runtime-config.test.mjs"]);
